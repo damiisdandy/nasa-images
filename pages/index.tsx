@@ -31,7 +31,6 @@ export default function Home() {
     e.preventDefault();
     const errors = validate();
     if (errors.length) {
-      console.log(errors);
       toast.error(
         errors.reduce((a, b, index) => a + (index !== 0 ? " and " : "") + b, "")
       );

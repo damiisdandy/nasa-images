@@ -4,7 +4,6 @@ import { ImSpinner8 } from "react-icons/im";
 import Image from "next/image";
 import dayjs from "dayjs";
 import useFetchLargeImage from "@/hooks/useFetchLargeImage";
-import { QueryCache } from "react-query";
 import { useEffect } from "react";
 
 export default function Show() {
