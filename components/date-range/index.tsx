@@ -1,10 +1,13 @@
-import { FC, InputHTMLAttributes } from "react";
+import { currentYear, earliestYear } from "@/config";
+import { ChangeEventHandler, FC, InputHTMLAttributes } from "react";
 import { BsCalendar } from "react-icons/bs";
-import { RxDividerVertical } from "react-icons/rx";
 
-// https://geoawesomeness.com/eo-hub/70-years-ago-first-image-earth-taken-spac
-const earliestYear = 1946;
-const currentYear = new Date().getFullYear();
+type DateRangeProps = {
+  endYear: string;
+  startYear: string;
+  onEndYearChange: ChangeEventHandler<HTMLInputElement>;
+  onStartYearChange: ChangeEventHandler<HTMLInputElement>;
+};
 
 type YearInputProps = InputHTMLAttributes<HTMLInputElement> & {};
 
@@ -21,16 +24,29 @@ const YearInput: FC<YearInputProps> = ({ ...rest }) => {
   );
 };
 
-const DateRange = () => {
+const DateRange: FC<DateRangeProps> = ({
+  endYear,
+  onEndYearChange,
+  startYear,
+  onStartYearChange,
+}) => {
   return (
     <div className="flex w-full px-3 py-1.5 gap-4 rounded-lg overflow-hidden bg-dark-300 items-center">
       <span>
         <BsCalendar />
       </span>
       <div className="flex w-full items-center gap-2">
-        <YearInput placeholder="from" />
+        <YearInput
+          value={startYear}
+          onChange={onStartYearChange}
+          placeholder="from"
+        />
         <span>|</span>
-        <YearInput placeholder="to" />
+        <YearInput
+          value={endYear}
+          onChange={onEndYearChange}
+          placeholder="to"
+        />
       </div>
     </div>
   );

@@ -2,11 +2,12 @@ import { useQuery } from 'react-query';
 import type { UseQueryResult } from 'react-query';
 import axios from 'axios';
 import { APIRoot } from '@/types';
+import { pageSize } from '@/config';
 
-type UseFetchProps = {
+export type UseFetchProps = {
   query: string;
-  startYear?: number;
-  endYear?: number;
+  startYear?: string;
+  endYear?: string;
   enabled: boolean;
 };
 
@@ -14,7 +15,7 @@ type UseFetchReturnType<T> = UseQueryResult<T> & {}
 
 
 const getNasaImages = async <T>({ query, startYear, endYear }: Omit<UseFetchProps, 'enabled'>) => {
-  const URL = encodeURI(`https://images-api.nasa.gov/search?q=${query}&media_type=image&page_size=20${startYear ?
+  const URL = encodeURI(`https://images-api.nasa.gov/search?q=${query}&media_type=image&page_size=${pageSize}${startYear ?
     `&year_start=${startYear}` : ''}${endYear ?
       `&year_end=${endYear}` : ''}`)
   console.log(URL);
