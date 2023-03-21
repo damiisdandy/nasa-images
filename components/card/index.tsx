@@ -1,10 +1,14 @@
 import { Item } from "@/types";
 import Image from "next/image";
+import Link from "next/link";
 import { FC } from "react";
 
 const Card: FC<Item> = ({ links, data }) => {
   return (
-    <div className="bg-dark-300 flex flex-col gap-1 p-3 w-full rounded-lg transition-all hover:scale-105">
+    <Link
+      href={`/show/${data[0].nasa_id}`}
+      className="bg-dark-300 flex flex-col gap-1 p-3 w-full rounded-lg transition-all hover:scale-105"
+    >
       <div className="relative object-cover w-full h-80 overflow-hidden">
         <Image
           className="rounded-lg h-[inherit] w-full object-cover"
@@ -27,7 +31,7 @@ const Card: FC<Item> = ({ links, data }) => {
           {data[0].photographer || "unknown"}
         </span>
       </p>
-    </div>
+    </Link>
   );
 };
 

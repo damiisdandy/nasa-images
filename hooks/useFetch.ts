@@ -30,7 +30,7 @@ const getNasaImages = async <T>({ query, startYear, endYear }: Omit<UseFetchProp
 
 export default function useFetch({ enabled, ...rest }: UseFetchProps): UseFetchReturnType<APIRoot> {
   const queryResponse = useQuery({
-    queryKey: ['images'],
+    queryKey: ['search'],
     queryFn: () => getNasaImages<APIRoot>(rest),
     enabled,
   })
