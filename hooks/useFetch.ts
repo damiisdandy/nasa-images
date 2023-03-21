@@ -1,5 +1,5 @@
-import { useQuery } from 'react-query';
-import type { UseQueryResult } from 'react-query';
+import { useInfiniteQuery } from 'react-query';
+import type { UseInfiniteQueryResult } from 'react-query';
 import axios from 'axios';
 import { APIRoot } from '@/types';
 import { pageSize } from '@/config';
@@ -11,16 +11,18 @@ export type UseFetchProps = {
   enabled: boolean;
 };
 
-type UseFetchReturnType<T> = UseQueryResult<T> & {}
+type UseFetchReturnType<T> = UseInfiniteQueryResult<T> & {}
 
 
-const getNasaImages = async <T>({ query, startYear, endYear }: Omit<UseFetchProps, 'enabled'>) => {
+const getNasaImages = async <T>({ query, startYear, endYear, nextURL }: Omit<UseFetchProps, 'enabled'> & { nextURL: any }) => {
+  console.log(nextURL);
   const urlParameters = new URLSearchParams({
     q: query,
     media_type: 'image',
     page_size: pageSize.toString(),
+    page: "2",
     ...(startYear ? { year_start: startYear } : {}),
-    ...(startYear ? { year_start: startYear } : {}),
+    ...(endYear ? { year_end: endYear } : {}),
   });
   const URL = encodeURI(`https://images-api.nasa.gov/search?${urlParameters.toString()}`)
   return axios
@@ -29,10 +31,11 @@ const getNasaImages = async <T>({ query, startYear, endYear }: Omit<UseFetchProp
 }
 
 export default function useFetch({ enabled, ...rest }: UseFetchProps): UseFetchReturnType<APIRoot> {
-  const queryResponse = useQuery({
+  const queryResponse = useInfiniteQuery({
     queryKey: ['search'],
-    queryFn: () => getNasaImages<APIRoot>(rest),
+    queryFn: ({ pageParam }) => getNasaImages<APIRoot>({ ...rest, nextURL: pageParam }),
     enabled,
+    getNextPageParam: (lastPage) => "hello",
   })
   return queryResponse;
 }

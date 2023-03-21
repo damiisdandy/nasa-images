@@ -2,7 +2,7 @@ import DateRange from "@/components/date-range";
 import SearchBar from "@/components/search-bar";
 import useFetch, { UseFetchProps } from "@/hooks/useFetch";
 import useForm from "@/hooks/useForm";
-import { FormEventHandler } from "react";
+import { FormEventHandler, useMemo } from "react";
 import { ImSpinner8 } from "react-icons/im";
 import { toast } from "react-hot-toast";
 import Card from "@/components/card";
@@ -39,6 +39,16 @@ export default function Home() {
     enableSearch();
   };
 
+  const mediaContent = useMemo(() => {
+    if (data) {
+      return data.pages.reduce(
+        (a: any[], b) => [...a, ...b.collection.items],
+        []
+      );
+    }
+    return [];
+  }, [data]);
+
   return (
     <div className="mt-4">
       <form
@@ -74,7 +84,7 @@ export default function Home() {
         </div>
       ) : (
         data &&
-        (data.collection.items.length === 0 ? (
+        (mediaContent.length === 0 ? (
           <div className="flex items-center justify-center h-[70vh]">
             <p className="text-[#888] text-center px-4">
               Can&apos;t find anythign results for query {query}
@@ -83,18 +93,18 @@ export default function Home() {
         ) : (
           <div className="mt-5">
             <p className="text-right text-[#888] px-4">
-              Displaying {data.collection.items.length} of{" "}
-              {data.collection.metadata.total_hits}
+              Displaying {mediaContent.length} of{" "}
+              {data.pages[0].collection.metadata.total_hits}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-4 gap-4 md:gap-6">
-              {data.collection.items.map((item) => (
+              {mediaContent.map((item) => (
                 <Card key={item.href} {...item} />
               ))}
             </div>
           </div>
         ))
       )}
-      {!searchEnabled && !data && (
+      {!searchEnabled && !mediaContent && (
         <div className="flex items-center justify-center h-[70vh]">
           <p className="text-[#888] text-center px-4">
             Your search results will display here :)
