@@ -9,8 +9,12 @@ module.exports = {
     extend: {
       colors: {
         dark: {
-          100: "#191919",
-          200: "#111",
+          100: "#111",
+          200: "#1a1a1a",
+          300: "#222",
+        },
+        placeholder: {
+          light: "#666",
         },
       },
     },
