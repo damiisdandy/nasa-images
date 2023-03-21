@@ -15,9 +15,14 @@ type UseFetchReturnType<T> = UseQueryResult<T> & {}
 
 
 const getNasaImages = async <T>({ query, startYear, endYear }: Omit<UseFetchProps, 'enabled'>) => {
-  const URL = encodeURI(`https://images-api.nasa.gov/search?q=${query}&media_type=image&page_size=${pageSize}${startYear ?
-    `&year_start=${startYear}` : ''}${endYear ?
-      `&year_end=${endYear}` : ''}`)
+  const urlParameters = new URLSearchParams({
+    q: query,
+    media_type: 'image',
+    page_size: pageSize.toString(),
+    ...(startYear ? { year_start: startYear } : {}),
+    ...(startYear ? { year_start: startYear } : {}),
+  });
+  const URL = encodeURI(`https://images-api.nasa.gov/search?${urlParameters.toString()}`)
   console.log(URL);
   return axios
     .get<T>(URL)

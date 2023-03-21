@@ -41,7 +41,7 @@ const DateRange: FC<DateRangeProps> = ({
           onChange={onStartYearChange}
           placeholder="from"
         />
-        <span>|</span>
+        <span className="text-[#aaa]">|</span>
         <YearInput
           value={endYear}
           onChange={onEndYearChange}
