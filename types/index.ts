@@ -39,6 +39,7 @@ export type Collection = {
   items: Item[]
   links: CollectionLink[];
   version: string;
+  metadata: Metadata;
 }
 
 export type APIRoot = {

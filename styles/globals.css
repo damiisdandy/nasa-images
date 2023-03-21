@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
+html,
+body {
   background-color: theme(colors.dark.100);
+}
+
+@keyframes spin {
+  from {
+    transform: rotateZ(0deg)
+  }
+  to {
+    transform: rotateZ(360deg)
+  }
+}
+.spin {
+  animation: spin ease-in-out 850ms infinite;
 }

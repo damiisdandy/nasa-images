@@ -23,7 +23,6 @@ const getNasaImages = async <T>({ query, startYear, endYear }: Omit<UseFetchProp
     ...(startYear ? { year_start: startYear } : {}),
   });
   const URL = encodeURI(`https://images-api.nasa.gov/search?${urlParameters.toString()}`)
-  console.log(URL);
   return axios
     .get<T>(URL)
     .then(res => res.data)

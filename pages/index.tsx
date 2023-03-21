@@ -2,10 +2,10 @@ import DateRange from "@/components/date-range";
 import SearchBar from "@/components/search-bar";
 import useFetch, { UseFetchProps } from "@/hooks/useFetch";
 import useForm from "@/hooks/useForm";
-import { FormEventHandler, useEffect, useState } from "react";
+import { FormEventHandler } from "react";
+import { ImSpinner8 } from "react-icons/im";
 import { toast } from "react-hot-toast";
-
-type FormFields = Omit<UseFetchProps, "enabled">;
+import Card from "@/components/card";
 
 export default function Home() {
   const {
@@ -20,7 +20,7 @@ export default function Home() {
     enableSearch,
   } = useForm();
 
-  const { data, isLoading, error } = useFetch({
+  const { data, isLoading, isFetching, error } = useFetch({
     query,
     startYear,
     endYear,
@@ -61,20 +61,46 @@ export default function Home() {
           </button>
         </div>
       </form>
-      {!data ? (
+      {isLoading || isFetching ? (
         <div className="flex items-center justify-center h-[70vh]">
-          {!searchEnabled ? (
-            <p className="text-[#888]">
-              You search results will display here :)
-            </p>
-          ) : isLoading ? (
-            <p>Loading...</p>
-          ) : error ? (
-            <p>Error</p>
-          ) : null}
+          <p className="text-[50px] spin">
+            <ImSpinner8 />
+          </p>
+        </div>
+      ) : error ? (
+        <div className="flex items-center justify-center h-[70vh]">
+          <p className="text-center px-4 font-bold text-red-400">
+            Error fetching images :(
+          </p>
         </div>
       ) : (
-        JSON.stringify(data)
+        data &&
+        (data.collection.items.length === 0 ? (
+          <div className="flex items-center justify-center h-[70vh]">
+            <p className="text-[#888] text-center px-4">
+              Can&apos;t find anythign results for query {query}
+            </p>
+          </div>
+        ) : (
+          <div className="mt-5">
+            <p className="text-right text-[#888] px-4">
+              Displaying {data.collection.items.length} of{" "}
+              {data.collection.metadata.total_hits}
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-4 gap-4 md:gap-6">
+              {data.collection.items.map((item) => (
+                <Card key={item.href} {...item} />
+              ))}
+            </div>
+          </div>
+        ))
+      )}
+      {!searchEnabled && !data && (
+        <div className="flex items-center justify-center h-[70vh]">
+          <p className="text-[#888] text-center px-4">
+            Your search results will display here :)
+          </p>
+        </div>
       )}
     </div>
   );
