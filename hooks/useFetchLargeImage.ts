@@ -15,7 +15,9 @@ const getLargeImage = async <T>({ url }: Omit<UseFetchLargeImage, "enabled">) =>
     .get<T>(url)
     .then(res => res.data)
 }
-
+/**
+ * Fetch high quality image after media data is gotten
+ */
 export default function useFetchLargeImage({ url, enabled }: UseFetchLargeImage): UseFetchReturnType<string[]> {
   const queryResponse = useQuery({
     queryFn: () => getLargeImage<string[]>({ url }),

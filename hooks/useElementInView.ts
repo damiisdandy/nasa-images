@@ -5,6 +5,9 @@ type UseElementInViewProps = {
   callback: () => void;
 }
 
+/**
+ * execute callback function when element is in view
+ */
 export default function useElementInView({ options, callback }: UseElementInViewProps) {
   const containerRef = useRef(null);
 

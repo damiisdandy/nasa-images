@@ -14,13 +14,12 @@ export type UseFetchProps = {
 type UseFetchReturnType<T> = UseInfiniteQueryResult<T> & {}
 
 
-const getNasaImages = async <T>({ query, startYear, endYear, nextURL }: Omit<UseFetchProps, 'enabled'> & { nextURL: any }) => {
-  console.log(nextURL);
+const getNasaImages = async <T>({ query, startYear, endYear, page = 1 }: Omit<UseFetchProps, 'enabled'> & { page: number }) => {
   const urlParameters = new URLSearchParams({
     q: query,
     media_type: 'image',
     page_size: pageSize.toString(),
-    page: "2",
+    page: page.toString(),
     ...(startYear ? { year_start: startYear } : {}),
     ...(endYear ? { year_end: endYear } : {}),
   });
@@ -30,12 +29,21 @@ const getNasaImages = async <T>({ query, startYear, endYear, nextURL }: Omit<Use
     .then(res => res.data)
 }
 
+/**
+ * Fetching media images from Nasa's API
+ */
 export default function useFetch({ enabled, ...rest }: UseFetchProps): UseFetchReturnType<APIRoot> {
   const queryResponse = useInfiniteQuery({
     queryKey: ['search'],
-    queryFn: ({ pageParam }) => getNasaImages<APIRoot>({ ...rest, nextURL: pageParam }),
+    queryFn: ({ pageParam }) => getNasaImages<APIRoot>({ ...rest, page: pageParam }),
     enabled,
-    getNextPageParam: (lastPage) => "hello",
+    getNextPageParam: (lastPage, pages) => {
+      const totalPages = Math.ceil(lastPage.collection.metadata.total_hits | pageSize)
+      if (pages.length < totalPages) {
+        return pages.length + 1;
+      }
+      return undefined;
+    }
   })
   return queryResponse;
 }

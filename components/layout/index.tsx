@@ -1,4 +1,3 @@
-import { Inter } from "next/font/google";
 import Head from "next/head";
 import { FC, ReactNode } from "react";
 import Navbar from "./navbar";
@@ -7,8 +6,6 @@ import css from "./layout.module.css";
 type Props = {
   children: ReactNode;
 };
-
-const inter = Inter({ subsets: ["latin"] });
 
 const Layout: FC<Props> = ({ children }) => {
   return (

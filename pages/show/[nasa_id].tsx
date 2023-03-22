@@ -12,6 +12,7 @@ export default function Show() {
 
   const { isLoading, data, error } = useFetchMediaById({
     id: nasa_id as string,
+    // only start fetching after query parameter is gotten
     enabled: nasa_id !== undefined,
   });
 
@@ -23,11 +24,13 @@ export default function Show() {
     refetch,
   } = useFetchLargeImage({
     url: data?.collection?.items[0].href!,
+    // fetch high quality image after media data is fetched
     enabled: data !== undefined,
   });
 
   useEffect(() => {
     if (data) {
+      // force fetch high quality image (ignore cache! fixes issue of high quality image not matching media detials on initial load)
       refetch();
     }
   }, [data, refetch]);
@@ -124,7 +127,7 @@ export default function Show() {
             Gallery
           </h2>
           <p className="text-center  mb-6 md:mb-12">
-            High Quality Image is displayed bellow
+            High Quality Image is displayed below
           </p>
           {isLoadingLargeImage || isFetchLargeImage ? (
             <p className="text-center">Fetching Gallery ...</p>

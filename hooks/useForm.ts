@@ -1,6 +1,9 @@
 import { currentYear, earliestYear } from "@/config";
 import { ChangeEventHandler, useState } from "react";
 
+/**
+ * Handle form fields: quert, startYear and endYear. Also includes validation
+ */
 export default function useForm() {
   const [query, setQuery] = useState<string>("");
   const [startYear, setStartYear] = useState<string>("");

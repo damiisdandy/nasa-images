@@ -6,6 +6,7 @@ import { FormEventHandler, useMemo } from "react";
 import { ImSpinner8 } from "react-icons/im";
 import { toast } from "react-hot-toast";
 import Card from "@/components/card";
+import useElementInView from "@/hooks/useElementInView";
 
 export default function Home() {
   const {
@@ -20,7 +21,15 @@ export default function Home() {
     enableSearch,
   } = useForm();
 
-  const { data, isLoading, isFetching, error } = useFetch({
+  const {
+    data,
+    isLoading,
+    isFetching,
+    isFetchingNextPage,
+    error,
+    fetchNextPage,
+    remove,
+  } = useFetch({
     query,
     startYear,
     endYear,
@@ -28,8 +37,11 @@ export default function Home() {
   });
 
   const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+    // on query change, only fetch first page
+    remove();
     e.preventDefault();
     const errors = validate();
+    // if errors, convert to string and display with toast
     if (errors.length) {
       toast.error(
         errors.reduce((a, b, index) => a + (index !== 0 ? " and " : "") + b, "")
@@ -39,6 +51,7 @@ export default function Home() {
     enableSearch();
   };
 
+  // reducing data from all pages into a single array
   const mediaContent = useMemo(() => {
     if (data) {
       return data.pages.reduce(
@@ -48,6 +61,16 @@ export default function Home() {
     }
     return [];
   }, [data]);
+
+  // interaction observer to fetch data as user scrolls
+  const containerRef = useElementInView({
+    options: {
+      root: null,
+      rootMargin: "0px",
+      threshold: 1.0,
+    },
+    callback: fetchNextPage,
+  });
 
   return (
     <div className="mt-4">
@@ -70,7 +93,7 @@ export default function Home() {
           </button>
         </div>
       </form>
-      {isLoading || isFetching ? (
+      {isLoading || (isFetching && !isFetchingNextPage) ? (
         <div className="flex items-center justify-center h-[70vh]">
           <p className="text-[50px] spin">
             <ImSpinner8 />
@@ -101,10 +124,19 @@ export default function Home() {
                 <Card key={item.href} {...item} />
               ))}
             </div>
+            {mediaContent.length !==
+              data.pages[0].collection.metadata.total_hits && (
+              <p
+                ref={containerRef}
+                className="text-center text-[#aaa] my-4 text-lg"
+              >
+                Fetching more images ...
+              </p>
+            )}
           </div>
         ))
       )}
-      {!searchEnabled && !mediaContent && (
+      {!searchEnabled && !data && (
         <div className="flex items-center justify-center h-[70vh]">
           <p className="text-[#888] text-center px-4">
             Your search results will display here :)

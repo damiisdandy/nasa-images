@@ -23,6 +23,9 @@ const getImageById = async <T>({ id }: Omit<UseFetchMediaByIdProps, "enabled">) 
     .then(res => res.data)
 }
 
+/**
+ * Fetch media from Nasa by Id
+ */
 export default function useFetchMediaById({ id, enabled }: UseFetchMediaByIdProps): UseFetchReturnType<APIRoot> {
   const queryResponse = useQuery({
     queryKey: ['media-by-id'],
