@@ -110,7 +110,7 @@ export default function Show() {
             <p className="font-bold flex items-start gap-2">
               Keywords:{" "}
               <span className="flex gap-2 items-center flex-wrap font-normal">
-                {content.data[0].keywords.map((keyword) => (
+                {content?.data[0]?.keywords?.map((keyword) => (
                   <span
                     className="block bg-[#444] px-2 py-0.5 rounded-md text-sm font-bold"
                     key={keyword}
