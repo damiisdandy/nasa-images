@@ -18,7 +18,12 @@ const Card: FC<Item> = ({ links, data }) => {
           height={400}
         />
       </div>
-      <p className="font-bold text-lg mt-2 line-clamp-2">{data[0].title}</p>
+      <p
+        data-testid="card-title"
+        className="font-bold text-lg mt-2 line-clamp-2"
+      >
+        {data[0].title}
+      </p>
       <p className="font-bold">
         Location:{" "}
         <span className="font-normal text-[#aaa]">

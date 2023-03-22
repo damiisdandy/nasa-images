@@ -11,7 +11,7 @@ export type UseFetchProps = {
   enabled: boolean;
 };
 
-type UseFetchReturnType<T> = UseInfiniteQueryResult<T> & {}
+export type UseFetchReturnType<T> = UseInfiniteQueryResult<T> & {}
 
 
 const getNasaImages = async <T>({ query, startYear, endYear, page = 1 }: Omit<UseFetchProps, 'enabled'> & { page: number }) => {

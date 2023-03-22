@@ -9,11 +9,14 @@ type DateRangeProps = {
   onStartYearChange: ChangeEventHandler<HTMLInputElement>;
 };
 
-type YearInputProps = InputHTMLAttributes<HTMLInputElement> & {};
+type YearInputProps = InputHTMLAttributes<HTMLInputElement> & {
+  testId: string;
+};
 
-const YearInput: FC<YearInputProps> = ({ ...rest }) => {
+const YearInput: FC<YearInputProps> = ({ testId, ...rest }) => {
   return (
     <input
+      data-testid={testId}
       className="bg-transparent w-full min-w-[theme(spacing.16)] placeholder:text-placeholder-light outline-none border-none"
       type="number"
       min={earliestYear}
@@ -37,12 +40,14 @@ const DateRange: FC<DateRangeProps> = ({
       </span>
       <div className="flex w-full items-center gap-2">
         <YearInput
+          testId="startYear-input"
           value={startYear}
           onChange={onStartYearChange}
           placeholder="from"
         />
         <span className="text-[#aaa]">|</span>
         <YearInput
+          testId="endYear-input"
           value={endYear}
           onChange={onEndYearChange}
           placeholder="to"

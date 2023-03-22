@@ -10,6 +10,7 @@ const SearchBar: FC<Props> = ({ ...rest }) => {
         <BsSearch />
       </span>
       <input
+        data-testid="search-input"
         className="bg-transparent w-full placeholder:text-placeholder-light outline-none border-none"
         placeholder="e.g Apollo 11"
         minLength={3}

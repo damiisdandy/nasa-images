@@ -88,7 +88,11 @@ const Home: FC = () => {
             startYear={startYear}
             onStartYearChange={onStartYearChange}
           />
-          <button type="submit" className="px-5 py-1 bg-blue-600 rounded-lg">
+          <button
+            data-testid="submit-button"
+            type="submit"
+            className="px-5 py-1 bg-blue-600 rounded-lg"
+          >
             Search
           </button>
         </div>
